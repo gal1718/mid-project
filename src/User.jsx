@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 
 const User = ({ setUserHnadler, user, updateUser }) => {
 
+    const [user, setDisplayUser] = useState({});
+
     console.log("users rended");
 
     const [showOtherData, setShowOtherData] = useState(false);
@@ -44,9 +46,9 @@ const User = ({ setUserHnadler, user, updateUser }) => {
                 {showOtherData &&
 
                     <div>
-                        Street: <input type="text" value={user.address.street} onChange={(event) => setUserHnadler({ ...user, address: { ...user.address, street: event.target.value } })}></input><br></br>
-                        City: <input type="text" value={user.address.city} onChange={(event) => setUserHnadler({ ...user, address: { ...user.address, city: event.target.value } })}></input><br></br>
-                        Zip Code: <input type="text" value={user.address.zipcode} onChange={(event) => setUserHnadler({ ...user, address: { ...user.address, zipcode: event.target.value } })}></input><br></br>
+                        Street: <input type="text" value={user.address.street} onChange={(event) => setDisplayUser({ ...user, address: { ...user.address, street: event.target.value } })}></input><br></br>
+                        City: <input type="text" value={user.address.city} onChange={(event) => setDisplayUser({ ...user, address: { ...user.address, city: event.target.value } })}></input><br></br>
+                        Zip Code: <input type="text" value={user.address.zipcode} onChange={(event) => setDisplayUser({ ...user, address: { ...user.address, zipcode: event.target.value } })}></input><br></br>
                     </div>
                 }
 

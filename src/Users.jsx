@@ -11,25 +11,7 @@ const Users = () => {
 
     const [displayUsers, setDisplayUsers] = useState([]);
     const [users, setUsers] = useState([]);
-    const [displayUser, setDisplayUser] = useState({
-        id: 0, name: '', username: '', email: '', address: {
-            street: '',
-            suite: '',
-            city: '',
-            zipcode: '',
-            geo: {
-                lat: '',
-                lng: ''
-            }
-        },
-        phone: '',
-        website: '',
-        company: {
-            name: '',
-            catchPhrase: '',
-            bs: ''
-        }, tasks: [], posts: [], tasksCompleted: false
-    });
+    
    
 
     useEffect(() => {
@@ -80,7 +62,7 @@ const Users = () => {
         let userIndex = users.findIndex(user => user.id == obj.id)
         usersCopy[userIndex] = obj;
         setDisplayUsers(usersCopy)
-        setDisplayUser(obj);
+       // setDisplayUser(obj);
         console.log(users)
 
     }
