@@ -1,66 +1,101 @@
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import UserTasks from "./UserTasks";
+import UserPosts from "./UserPosts";
 
 
-const User = ({ setUserHnadler, user, updateUser }) => {
+const User = ({ user, updateUser, deleteUser, markTaskCompleted, AddNewTaskUsers, AddNewPostUsers }) => {
 
-    const [user, setDisplayUser] = useState({});
-
-    console.log("users rended");
-
+    const [displayUser, setDisplayUser] = useState(user);
+    const [selected, setSelected] = useState(false);
     const [showOtherData, setShowOtherData] = useState(false);
-    // const toDosUrl = 'https://jsonplaceholder.typicode.com/todos';
+    const [tasksCompleted, setTaskCompleted] = useState(displayUser.tasksCompleted)
 
-    // useEffect(() => {
-
-    //     const getTasks = async () => {
-    //         const { data: userTasks } = await axios.get(`${toDosUrl}/?userId=${user.id}`)
-    //         setUserHnadle({ ...user, tasks: data })
-    //         console.log(data);
-    //     }
-    //     getTasks();
-    // }, [])
-    //console.log(userFromparent.id)
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        updateUser(user);
-        //updatePerson(personFromParent);
-        //console.log(person);
+        updateUser(displayUser);
+
+    }
+
+    const markCompleted = (userId, taskId) => {
+
+        setTaskCompleted(markTaskCompleted(userId, taskId))
+
+    }
+
+    const AddNewTaskUser = (userId, task) => {
+
+        AddNewTaskUsers(userId, task)
+
+
+    }
+
+
+    const AddNewPostUser = (userId, post) => {
+
+        AddNewPostUsers(userId, post)
+
+
     }
 
 
 
+
+
+
     return (
-        <div className="User" style={{ textAlign: 'center' }}>
-            <form style={{ border: user.tasksCompleted ? '2px solid green' : '2px solid red', width: "fit-content" }} onSubmit={handleSubmit}>
+        <div className="User" style={{ textAlign: 'left', margin: "10px", position: "relative" }}>
 
-                ID: {user.id}<br></br>
-                Name: <input type="text" value={user.name} onChange={(event) => setUserHnadler({ ...user, name: event.target.value })}></input><br></br>
-                Email: <input type="email" value={user.email} onChange={(event) => setUserHnadler({ ...user, email: event.target.value })}></input> <br></br>
 
-                <section onMouseOver={() => setShowOtherData(true)} onClick={() => setShowOtherData(false)} style={{ backgroundColor: "grey" }}>Other Data</section>
 
-                <button type="submit">Update</button>
+            <form style={{ backgroundColor: selected ? 'orange' : '', border: tasksCompleted ? '2px solid green' : '2px solid red', width: "340px", padding: "15px" }} onSubmit={handleSubmit}>
+
+                <strong onClick={() => setSelected(!selected)}>ID: {displayUser.id}</strong><br></br>
+                <strong>Name: <input type="text" value={displayUser.name} onChange={(event) => setDisplayUser({ ...displayUser, name: event.target.value })}></input></strong><br></br><br />
+                <strong>Email: <input type="email" value={displayUser.email} onChange={(event) => setDisplayUser({ ...displayUser, email: event.target.value })}></input></strong> <br></br><br></br>
+
+
+                <span onMouseOver={() => setShowOtherData(true)} onClick={() => setShowOtherData(false)} style={{ backgroundColor: "grey" }}>Other Data</span><br /><br />
 
                 {showOtherData &&
 
-                    <div>
-                        Street: <input type="text" value={user.address.street} onChange={(event) => setDisplayUser({ ...user, address: { ...user.address, street: event.target.value } })}></input><br></br>
-                        City: <input type="text" value={user.address.city} onChange={(event) => setDisplayUser({ ...user, address: { ...user.address, city: event.target.value } })}></input><br></br>
-                        Zip Code: <input type="text" value={user.address.zipcode} onChange={(event) => setDisplayUser({ ...user, address: { ...user.address, zipcode: event.target.value } })}></input><br></br>
+                    <div style={{ border: "2px solid black", borderRadius: "5px", padding: "10px" }}>
+                        <strong>Street: <input type="text" value={displayUser.address?.street} onChange={(event) => setDisplayUser({ ...displayUser, address: { ...displayUser.address, street: event.target.value } })}></input></strong><br></br><br />
+                        <strong>City: <input type="text" value={displayUser.address?.city} onChange={(event) => setDisplayUser({ ...displayUser, address: { ...displayUser.address, city: event.target.value } })}></input></strong><br></br><br />
+                        <strong>Zip Code: <input type="text" value={displayUser.address?.zipcode} onChange={(event) => setDisplayUser({ ...displayUser, address: { ...displayUser.address, zipcode: event.target.value } })}></input></strong><br></br>
                     </div>
+
                 }
 
+
+                <button style={{ marginRight: "6px" }} type="submit">Update</button>
+                <button onClick={() => deleteUser(displayUser)}>Delete</button>
+
+
+
             </form>
+
+            <div style={{ width: "350px", position: "absolute", top: "0", "right": "50%", overflowY: "auto", height: "340px" }}>
+
+                {selected &&
+
+                    <div>
+                        <UserTasks markCompleted={markCompleted} user={displayUser} AddNewTaskUser={AddNewTaskUser}></UserTasks><br/> <br/>
+                        <UserPosts user={displayUser} AddNewPostUser={AddNewPostUser}></UserPosts>
+                    </div>
+
+                }
+            </div>
+
+
+
+
 
 
         </div>
 
     )
-
-
-
 }
 
 export default User
