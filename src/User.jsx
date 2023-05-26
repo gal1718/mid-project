@@ -20,13 +20,28 @@ const User = ({ user, updateUser, deleteUser, markTaskCompleted, AddNewTaskUsers
 
     const markCompleted = (userId, taskId) => {
 
-        setTaskCompleted(markTaskCompleted(userId, taskId))
+        // debugger;
+        setTaskCompleted(markTaskCompleted(userId, taskId))//mark completed in parent - users
+
+        let displayUserCopy = displayUser;
+        console.log(displayUser);
+        let taskIndex = displayUserCopy.tasks.findIndex(task => task.id == taskId)
+        console.log(taskIndex);
+        displayUserCopy.tasks[taskIndex].completed = true
+        setDisplayUser(displayUserCopy)
 
     }
 
     const AddNewTaskUser = (userId, task) => {
 
+        setTaskCompleted(false);
         AddNewTaskUsers(userId, task)
+
+        //add task to dispayuser state
+        let displayUserCopy = displayUser;
+        displayUserCopy.tasks.push(task);
+        setDisplayUser(displayUserCopy)
+
 
 
     }
@@ -81,7 +96,7 @@ const User = ({ user, updateUser, deleteUser, markTaskCompleted, AddNewTaskUsers
                 {selected &&
 
                     <div>
-                        <UserTasks markCompleted={markCompleted} user={displayUser} AddNewTaskUser={AddNewTaskUser}></UserTasks><br/> <br/>
+                        <UserTasks markCompleted={markCompleted} user={displayUser} AddNewTaskUser={AddNewTaskUser}></UserTasks><br /> <br />
                         <UserPosts user={displayUser} AddNewPostUser={AddNewPostUser}></UserPosts>
                     </div>
 

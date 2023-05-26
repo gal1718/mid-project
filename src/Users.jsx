@@ -6,12 +6,13 @@ import './Users.css';
 
 const Users = () => {
 
-    const [displayUsers, setDisplayUsers] = useState([]); //display users
+    // const [displayUsers, setDisplayUsers] = useState([]); //display users
     const [users, setUsers] = useState([]);// "DB" users
     const [addNewUser, setAddNewUser] = useState(false);
     //const [newUser, setNewUser] = useState({id: 0, name: "", email: "" });
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
+    const [filter, setNewFilter] = useState("")
 
 
 
@@ -38,7 +39,7 @@ const Users = () => {
                 return user;
             })
 
-            setDisplayUsers(users);
+            // setDisplayUsers(users);
             setUsers(users);
         }
 
@@ -57,11 +58,15 @@ const Users = () => {
     }
 
 
-    const filterUsers = (e) => {
 
-        const filteredUsers = users.filter(user => user.name.toLowerCase().indexOf(e.target.value.toLowerCase()) != -1 || user.email.toLowerCase().indexOf(e.target.value.toLowerCase()) != -1);
-        setDisplayUsers(filteredUsers);
-    };
+
+
+    // const filterUsers = (filter) => {
+
+    //     setNewFilter(event.target.value)
+    //     const filteredUsers = users.filter(user => user.name.toLowerCase().indexOf(e.target.value.toLowerCase()) != -1 || user.email.toLowerCase().indexOf(e.target.value.toLowerCase()) != -1);
+    //     setDisplayUsers(filteredUsers);
+    // };
 
 
     const updateUser = (obj) => {
@@ -70,7 +75,7 @@ const Users = () => {
         let userIndex = users.findIndex(user => user.id == obj.id)
         usersCopy[userIndex] = obj;
         setUsers(usersCopy);
-        setDisplayUsers(usersCopy)
+        // setDisplayUsers(usersCopy)
     }
 
 
@@ -78,7 +83,7 @@ const Users = () => {
 
         let newUsers = users.filter(user => user.id != obj.id);
         setUsers(newUsers);
-        setDisplayUsers(newUsers)
+        //setDisplayUsers(newUsers)
 
     }
 
@@ -89,9 +94,10 @@ const Users = () => {
         let userIndex = users.findIndex(user => user.id == userId)
         let taskIndex = usersCopy[userIndex].tasks.findIndex(task => task.id == taskId);
         usersCopy[userIndex].tasks[taskIndex].completed = true;
+        
         usersCopy[userIndex].tasksCompleted = AllTasksCompleted(usersCopy[userIndex].tasks)
         setUsers(usersCopy);
-        setDisplayUsers(usersCopy)
+        // setDisplayUsers(usersCopy)
         return usersCopy[userIndex].tasksCompleted;
 
     }
@@ -102,8 +108,9 @@ const Users = () => {
         let usersCopy = users;
         let userIndex = users.findIndex(user => user.id == userId)
         usersCopy[userIndex].tasks.push(task)
+        usersCopy[userIndex].tasksCompleted = false;
         setUsers(usersCopy);
-        setDisplayUsers(usersCopy)
+        // setDisplayUsers(usersCopy)
 
     }
 
@@ -114,17 +121,19 @@ const Users = () => {
         let userIndex = users.findIndex(user => user.id == userId)
         usersCopy[userIndex].posts.push(post)
         setUsers(usersCopy);
-        setDisplayUsers(usersCopy)
+        //  setDisplayUsers(usersCopy)
 
     }
 
     const handleNewUser = () => {
 
-        const newUser = { id: users ? users.length + 1 : 1, name, email, address: { street: "", city: "" , zipcode: ""}, tasks: [], posts: [], tasksCompleted: false}
+       
+        const biggestId = Math.max(...users.map((user) => user.id), 0);
+        const newUser = { id: biggestId + 1 , name, email, address: { street: "", city: "", zipcode: "" }, tasks: [], posts: [], tasksCompleted: false }
         let usersCopy = users;
         usersCopy.push(newUser);
 
-        setDisplayUsers(usersCopy)
+        // setDisplayUsers(usersCopy)
         setUsers(usersCopy);
         setName("");/// need to set it uo to see the new user. or anything else except displayuser or users. why ? 
         setEmail("");
@@ -136,11 +145,14 @@ const Users = () => {
 
         <div className="Users">
 
-            <div style={{display: "flex"}}>
-            Search: <input type="text" onChange={filterUsers}></input>
-            <button onClick={() => setAddNewUser(true)}>Add</button>
+            <div style={{ display: "flex" }}>
+                Search: <input type="text" onChange={(event) => setNewFilter(event.target.value)}></input>
+                <button onClick={() => setAddNewUser(true)}>Add</button>
             </div>
-            {displayUsers.map((user) =>
+
+
+
+            {users.filter((user) => user.name.toLowerCase().indexOf(filter) != -1 || user.email.toLowerCase().indexOf(filter) != -1).map((user) =>
 
 
                 <User key={user.id} user={user} updateUser={updateUser} deleteUser={deleteUser} markTaskCompleted={markTaskCompleted} AddNewTaskUsers={AddNewTaskUsers} AddNewPostUsers={AddNewPostUsers}></User>)

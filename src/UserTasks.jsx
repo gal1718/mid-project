@@ -13,11 +13,20 @@ const UserTasks = ({ user, markCompleted, AddNewTaskUser }) => {
 
 
     const userTasksMarkCompleted = (userId, taskId) => {
-        markCompleted(userId, taskId)
+        
+    
+        let userTasksCopy = userTasks;
+        let taskIndex = userTasks.findIndex(task => task.id == taskId)
+        userTasksCopy[taskIndex].completed = false;
+        setUserTasks(userTasksCopy);
+        
+        markCompleted(userId, taskId)//mark in parent -user
 
     }
 
     const handleNewTaskTitle = () => {
+
+        debugger;
 
         console.log(userTasks)
         const newTask = { userId: user.id, id: userTasks ? userTasks.length+1 : 1, title: newTaskTitle, completed: false}
