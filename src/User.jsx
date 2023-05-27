@@ -14,21 +14,19 @@ const User = ({ user, updateUser, deleteUser, markTaskCompleted, AddNewTaskUsers
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        updateUser(displayUser);
+        updateUser({...displayUser});
 
     }
 
     const markCompleted = (userId, taskId) => {
 
-        // debugger;
         setTaskCompleted(markTaskCompleted(userId, taskId))//mark completed in parent - users
 
         let displayUserCopy = displayUser;
-        console.log(displayUser);
         let taskIndex = displayUserCopy.tasks.findIndex(task => task.id == taskId)
-        console.log(taskIndex);
         displayUserCopy.tasks[taskIndex].completed = true
-        setDisplayUser(displayUserCopy)
+
+        setDisplayUser({...displayUserCopy})
 
     }
 
@@ -40,10 +38,7 @@ const User = ({ user, updateUser, deleteUser, markTaskCompleted, AddNewTaskUsers
         //add task to dispayuser state
         let displayUserCopy = displayUser;
         displayUserCopy.tasks.push(task);
-        setDisplayUser(displayUserCopy)
-
-
-
+        setDisplayUser({...displayUserCopy})
     }
 
 
@@ -51,10 +46,7 @@ const User = ({ user, updateUser, deleteUser, markTaskCompleted, AddNewTaskUsers
 
         AddNewPostUsers(userId, post)
 
-
     }
-
-
 
 
 
@@ -102,10 +94,6 @@ const User = ({ user, updateUser, deleteUser, markTaskCompleted, AddNewTaskUsers
 
                 }
             </div>
-
-
-
-
 
 
         </div>

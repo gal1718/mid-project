@@ -10,13 +10,8 @@ const Task = ({task,userTasksMarkCompleted}) => {
     const taskMarkCompleted = (userId,taskId) =>{
         setTaskCompleted(true);
         userTasksMarkCompleted(userId,taskId)
-        // let userTasksCopy = userTasks;
-        // const taskIndex = userTasksCopy.findIndex(task => task.id == taskId);
-        // userTasksCopy[taskIndex].completed = true;
-        
-        // setUserTasks(userTasksCopy)
-    }
 
+    }
 
 
     return (

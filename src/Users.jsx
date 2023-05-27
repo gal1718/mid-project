@@ -6,7 +6,6 @@ import './Users.css';
 
 const Users = () => {
 
-    // const [displayUsers, setDisplayUsers] = useState([]); //display users
     const [users, setUsers] = useState([]);// "DB" users
     const [addNewUser, setAddNewUser] = useState(false);
     //const [newUser, setNewUser] = useState({id: 0, name: "", email: "" });
@@ -39,7 +38,6 @@ const Users = () => {
                 return user;
             })
 
-            // setDisplayUsers(users);
             setUsers(users);
         }
 
@@ -59,31 +57,20 @@ const Users = () => {
 
 
 
-
-
-    // const filterUsers = (filter) => {
-
-    //     setNewFilter(event.target.value)
-    //     const filteredUsers = users.filter(user => user.name.toLowerCase().indexOf(e.target.value.toLowerCase()) != -1 || user.email.toLowerCase().indexOf(e.target.value.toLowerCase()) != -1);
-    //     setDisplayUsers(filteredUsers);
-    // };
-
-
     const updateUser = (obj) => {
 
         let usersCopy = users;
         let userIndex = users.findIndex(user => user.id == obj.id)
         usersCopy[userIndex] = obj;
-        setUsers(usersCopy);
-        // setDisplayUsers(usersCopy)
+        setUsers([...usersCopy]);
+
     }
 
 
     const deleteUser = (obj) => {
 
         let newUsers = users.filter(user => user.id != obj.id);
-        setUsers(newUsers);
-        //setDisplayUsers(newUsers)
+        setUsers([...newUsers]);
 
     }
 
@@ -96,8 +83,8 @@ const Users = () => {
         usersCopy[userIndex].tasks[taskIndex].completed = true;
         
         usersCopy[userIndex].tasksCompleted = AllTasksCompleted(usersCopy[userIndex].tasks)
-        setUsers(usersCopy);
-        // setDisplayUsers(usersCopy)
+        setUsers([...usersCopy]);
+     
         return usersCopy[userIndex].tasksCompleted;
 
     }
@@ -109,9 +96,8 @@ const Users = () => {
         let userIndex = users.findIndex(user => user.id == userId)
         usersCopy[userIndex].tasks.push(task)
         usersCopy[userIndex].tasksCompleted = false;
-        setUsers(usersCopy);
-        // setDisplayUsers(usersCopy)
-
+        setUsers([...usersCopy]);
+    
     }
 
 
@@ -120,9 +106,8 @@ const Users = () => {
         let usersCopy = users;
         let userIndex = users.findIndex(user => user.id == userId)
         usersCopy[userIndex].posts.push(post)
-        setUsers(usersCopy);
-        //  setDisplayUsers(usersCopy)
-
+        setUsers([...usersCopy]);
+ 
     }
 
     const handleNewUser = () => {
@@ -133,9 +118,8 @@ const Users = () => {
         let usersCopy = users;
         usersCopy.push(newUser);
 
-        // setDisplayUsers(usersCopy)
-        setUsers(usersCopy);
-        setName("");/// need to set it uo to see the new user. or anything else except displayuser or users. why ? 
+        setUsers([...usersCopy]);
+        setName("");
         setEmail("");
     }
 

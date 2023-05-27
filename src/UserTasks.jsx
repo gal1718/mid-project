@@ -11,14 +11,12 @@ const UserTasks = ({ user, markCompleted, AddNewTaskUser }) => {
 
 
 
-
     const userTasksMarkCompleted = (userId, taskId) => {
         
-    
         let userTasksCopy = userTasks;
         let taskIndex = userTasks.findIndex(task => task.id == taskId)
         userTasksCopy[taskIndex].completed = false;
-        setUserTasks(userTasksCopy);
+        setUserTasks([...userTasksCopy]);
         
         markCompleted(userId, taskId)//mark in parent -user
 
@@ -26,14 +24,12 @@ const UserTasks = ({ user, markCompleted, AddNewTaskUser }) => {
 
     const handleNewTaskTitle = () => {
 
-        debugger;
-
-        console.log(userTasks)
-        const newTask = { userId: user.id, id: userTasks ? userTasks.length+1 : 1, title: newTaskTitle, completed: false}
+        const biggestId = Math.max(...userTasks.map((task) => task.id), 0);
+       
+        const newTask = { userId: user.id, id: biggestId + 1 , title: newTaskTitle, completed: false}
         setUserTasks([...userTasks,newTask]);
         setAddTask(false)
         AddNewTaskUser(user.id,newTask);
-        //add new task to DB
     }
 
 
@@ -59,8 +55,6 @@ const UserTasks = ({ user, markCompleted, AddNewTaskUser }) => {
                 </div>
 
             }
-
-
 
         </div>
 
