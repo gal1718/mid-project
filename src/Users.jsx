@@ -2,6 +2,7 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import User from './User';
 import './Users.css';
+import NewUser from './NewUser'
 
 
 const Users = () => {
@@ -81,10 +82,10 @@ const Users = () => {
         let userIndex = users.findIndex(user => user.id == userId)
         let taskIndex = usersCopy[userIndex].tasks.findIndex(task => task.id == taskId);
         usersCopy[userIndex].tasks[taskIndex].completed = true;
-        
+
         usersCopy[userIndex].tasksCompleted = AllTasksCompleted(usersCopy[userIndex].tasks)
         setUsers([...usersCopy]);
-     
+
         return usersCopy[userIndex].tasksCompleted;
 
     }
@@ -97,7 +98,7 @@ const Users = () => {
         usersCopy[userIndex].tasks.push(task)
         usersCopy[userIndex].tasksCompleted = false;
         setUsers([...usersCopy]);
-    
+
     }
 
 
@@ -107,14 +108,14 @@ const Users = () => {
         let userIndex = users.findIndex(user => user.id == userId)
         usersCopy[userIndex].posts.push(post)
         setUsers([...usersCopy]);
- 
+
     }
 
     const handleNewUser = () => {
 
-       
+
         const biggestId = Math.max(...users.map((user) => user.id), 0);
-        const newUser = { id: biggestId + 1 , name, email, address: { street: "", city: "", zipcode: "" }, tasks: [], posts: [], tasksCompleted: false }
+        const newUser = { id: biggestId + 1, name, email, address: { street: "", city: "", zipcode: "" }, tasks: [], posts: [], tasksCompleted: false }
         let usersCopy = users;
         usersCopy.push(newUser);
 
@@ -132,8 +133,8 @@ const Users = () => {
             <div style={{ display: "flex" }}>
                 Search: <input type="text" onChange={(event) => setNewFilter(event.target.value)}></input>
                 <button onClick={() => setAddNewUser(true)}>Add</button>
-            </div>
 
+            </div>
 
 
             {users.filter((user) => user.name.toLowerCase().indexOf(filter) != -1 || user.email.toLowerCase().indexOf(filter) != -1).map((user) =>
@@ -144,14 +145,12 @@ const Users = () => {
 
 
             {addNewUser &&
-                <div>
+                <NewUser handleNewUser={handleNewUser} setAddNewUser={setAddNewUser} setEmail={setEmail} setName={setName} name={name} email={email}></NewUser>
 
-                    Name: <input value={name} type="text" onChange={(event) => setName(event.target.value)}></input>
-                    Email: <input value={email} type="email" onChange={(event) => setEmail(event.target.value)}></input>
-                    <button onClick={() => handleNewUser()}>Add</button>
-                    <button onClick={() => setAddNewUser(false)}>Cancel</button>
-                </div>
             }
+
+
+
         </div>
     )
 }

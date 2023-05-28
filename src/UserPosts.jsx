@@ -14,8 +14,8 @@ const UserPosts = ({ user, AddNewPostUser }) => {
 
     const handleNewPost = () => {
 
-        console.log(userPosts)
-        const newPost = { userId: user.id, id: userPosts ? userPosts.length+1 : 1, title: newPostTitle, body: newPostBody}
+        const biggestId = Math.max(...userPosts.map((post) => post.id), 0);
+        const newPost = { userId: user.id, id: biggestId + 1 , title: newPostTitle, body: newPostBody}
         setUserPosts([...userPosts,newPost]);
         setAddPost(false)
         AddNewPostUser(user.id,newPost);
