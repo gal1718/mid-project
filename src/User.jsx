@@ -9,7 +9,7 @@ const User = ({ user, updateUser, deleteUser, markTaskCompleted, AddNewTaskUsers
     const [displayUser, setDisplayUser] = useState(user);
     const [selected, setSelected] = useState(false);
     const [showOtherData, setShowOtherData] = useState(false);
-    const [tasksCompleted, setTaskCompleted] = useState(displayUser.tasksCompleted)
+    const [tasksCompleted, setTasksCompleted] = useState(displayUser.tasksCompleted)
 
 
     const handleSubmit = (event) => {
@@ -20,7 +20,7 @@ const User = ({ user, updateUser, deleteUser, markTaskCompleted, AddNewTaskUsers
 
     const markCompleted = (userId, taskId) => {
 
-        setTaskCompleted(markTaskCompleted(userId, taskId))//mark completed in parent - users
+        setTasksCompleted(markTaskCompleted(userId, taskId))//mark completed in parent - users
 
         let displayUserCopy = displayUser;
         let taskIndex = displayUserCopy.tasks.findIndex(task => task.id == taskId)
@@ -32,7 +32,7 @@ const User = ({ user, updateUser, deleteUser, markTaskCompleted, AddNewTaskUsers
 
     const AddNewTaskUser = (userId, task) => {
 
-        setTaskCompleted(false);
+        setTasksCompleted(false);
         AddNewTaskUsers(userId, task)
 
         //add task to dispayuser state
