@@ -1,35 +1,30 @@
 
-import * as React from 'react'
 import { useState } from 'react'
 import Task from './Task'
 
-const UserTasks = ({ user, markCompleted, AddNewTaskUser }) => {
+const UserTasks = ({ user, markCompleted,markAllCompleted, AddNewTaskUser }) => {
 
-    const [userTasks, setUserTasks] = useState(user.tasks)
     const [addTask, setAddTask] = useState(false);
-    const [newTaskTitle, setNewTaskTitle] = useState("");
+   const [newTaskTitle, setNewTaskTitle] = useState("");
 
 
 
     const userTasksMarkCompleted = (userId, taskId) => {
         
-        let userTasksCopy = userTasks;
-        let taskIndex = userTasks.findIndex(task => task.id == taskId)
-        userTasksCopy[taskIndex].completed = false;
-        setUserTasks([...userTasksCopy]);
-        
         markCompleted(userId, taskId)//mark in parent -user
 
     }
 
+ 
+
     const handleNewTaskTitle = () => {
 
-        const biggestId = Math.max(...userTasks.map((task) => task.id), 0);
-       
-        const newTask = { userId: user.id, id: biggestId + 1 , title: newTaskTitle, completed: false}
-        setUserTasks([...userTasks,newTask]);
+        const biggestId = Math.max(...user.tasks.map((task) => task.id), 0);
+ 
+        const newTask = { userId: user.id, id: biggestId + 1, title: newTaskTitle, completed: false}
         setAddTask(false)
         AddNewTaskUser(user.id,newTask);
+        setNewTaskTitle("");
     }
 
 
@@ -38,10 +33,11 @@ const UserTasks = ({ user, markCompleted, AddNewTaskUser }) => {
     return (
         <div className="UserTasks">
             <strong>Todos - User {user.id}</strong> <button onClick={() => setAddTask(true)}>Add</button> <br/> <br/> <br/>
+            {!user.tasksCompleted && <button onClick={() => markAllCompleted()}>Mark All Completed</button>}
 
-            {!addTask && userTasks.map((task) => {
+            {!addTask && user.tasks.map((task) => {
 
-                return <Task userTasksMarkCompleted={userTasksMarkCompleted} key={task.id} task={task}></Task>
+                return <Task userTasksMarkCompleted={userTasksMarkCompleted} markAllCompleted={markAllCompleted} key={task.id} task={task}></Task>
 
             })
             }
@@ -52,6 +48,7 @@ const UserTasks = ({ user, markCompleted, AddNewTaskUser }) => {
                     <strong>Title: <input value={newTaskTitle} onChange={(event) => setNewTaskTitle(event.target.value)} type="text"></input></strong>
                     <button onClick={() => setAddTask(false)}>Cancel</button>
                     <button onClick={() => handleNewTaskTitle()}>Add</button>
+                  
                 </div>
 
             }

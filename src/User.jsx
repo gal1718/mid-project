@@ -4,49 +4,45 @@ import UserTasks from "./UserTasks";
 import UserPosts from "./UserPosts";
 
 
-const User = ({ user, updateUser, deleteUser, markTaskCompleted, AddNewTaskUsers, AddNewPostUsers }) => {
+const User = ({ user, updateUser, deleteUser, markTaskCompleted, AddNewTaskUsers, AddNewPostUsers, markUserTasksAllCompleted }) => {
 
     const [displayUser, setDisplayUser] = useState(user);
     const [selected, setSelected] = useState(false);
     const [showOtherData, setShowOtherData] = useState(false);
-    const [tasksCompleted, setTasksCompleted] = useState(displayUser.tasksCompleted)
 
 
     const handleSubmit = (event) => {
+        debugger
         event.preventDefault();
-        updateUser({ ...displayUser });
+        //console.log(`displayUser: ${JSON.stringify(displayUser)} user: ${JSON.stringify(user)}`)
+        updateUser({ ...user, name: displayUser.name, email: displayUser.email, address: displayUser.address});
 
     }
 
     const markCompleted = (userId, taskId) => {
 
-        setTasksCompleted(markTaskCompleted(userId, taskId))//mark completed in parent - users
+        const tasks = displayUser.tasks.map(task => task.id === taskId ? { ...task, completed: true } : task);
+        setDisplayUser({ ...displayUser, tasks });
+        markTaskCompleted(userId, taskId)
 
-        let displayUserCopy = displayUser;
-        let taskIndex = displayUserCopy.tasks.findIndex(task => task.id == taskId)
-        displayUserCopy.tasks[taskIndex].completed = true
 
-        setDisplayUser({ ...displayUserCopy })
+    }
+
+    const markAllCompleted = () => {
+
+        const tasks = displayUser.tasks.map(task =>   {return {...task, completed: true}});
+        setDisplayUser({ ...displayUser, tasks });
+        markUserTasksAllCompleted(user.id)
+
 
     }
 
     const AddNewTaskUser = (userId, task) => {
 
-        setTasksCompleted(false);
         AddNewTaskUsers(userId, task)
 
-        //add task to dispayuser state
-        let displayUserCopy = displayUser;
-        displayUserCopy.tasks.push(task);
-        setDisplayUser({ ...displayUserCopy })
     }
 
-
-    const AddNewPostUser = (userId, post) => {
-
-        AddNewPostUsers(userId, post)
-
-    }
 
 
 
@@ -56,9 +52,9 @@ const User = ({ user, updateUser, deleteUser, markTaskCompleted, AddNewTaskUsers
 
 
 
-            <form style={{ backgroundColor: selected ? 'orange' : '', border: tasksCompleted ? '2px solid green' : '2px solid red', width: "340px", padding: "15px" }} onSubmit={handleSubmit}>
+            <form style={{ backgroundColor: selected ? 'orange' : '', border: user.tasksCompleted ? '2px solid green' : '2px solid red', width: "340px", padding: "15px" }} onSubmit={handleSubmit}>
 
-                <div style={{display: "flex", flexDirection: "column"}}>
+                <div style={{ display: "flex", flexDirection: "column" }}>
                     <div>
                         <strong onClick={() => setSelected(!selected)}>ID: {displayUser.id}</strong><br></br><br></br>
                         <strong>Name: <input type="text" value={displayUser.name} onChange={(event) => setDisplayUser({ ...displayUser, name: event.target.value })}></input></strong><br></br><br />
@@ -79,7 +75,7 @@ const User = ({ user, updateUser, deleteUser, markTaskCompleted, AddNewTaskUsers
 
 
                     </div>
-                    <div style={{alignSelf: "end"}}>
+                    <div style={{ alignSelf: "end" }}>
                         <button style={{ marginRight: "6px" }} type="submit">Update</button>
                         <button onClick={() => deleteUser(displayUser)}>Delete</button>
                     </div>
@@ -93,8 +89,8 @@ const User = ({ user, updateUser, deleteUser, markTaskCompleted, AddNewTaskUsers
                 {selected &&
 
                     <div>
-                        <UserTasks markCompleted={markCompleted} user={displayUser} AddNewTaskUser={AddNewTaskUser}></UserTasks><br /> <br />
-                        <UserPosts user={displayUser} AddNewPostUser={AddNewPostUser}></UserPosts>
+                        <UserTasks markCompleted={markCompleted} markAllCompleted={markAllCompleted} user={user} AddNewTaskUser={AddNewTaskUser}></UserTasks><br /> <br />
+                        <UserPosts user={user} AddNewPostUsers={AddNewPostUsers}></UserPosts>
                     </div>
 
                 }

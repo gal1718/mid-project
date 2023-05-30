@@ -3,9 +3,8 @@ import * as React from 'react'
 import { useState } from 'react'
 import Post from './Post'
 
-const UserPosts = ({ user, AddNewPostUser }) => {
+const UserPosts = ({ user, AddNewPostUsers }) => {
 
-    const [userPosts, setUserPosts] = useState(user.posts)
     const [addPost, setAddPost] = useState(false);
     const [newPostTitle,setNewPostTitle] = useState("");
     const [newPostBody,setNewPostBody] = useState("");
@@ -13,13 +12,14 @@ const UserPosts = ({ user, AddNewPostUser }) => {
    
 
     const handleNewPost = () => {
-
-        const biggestId = Math.max(...userPosts.map((post) => post.id), 0);
+    
+        const biggestId = Math.max(...user.posts.map((post) => post.id), 0);
         const newPost = { userId: user.id, id: biggestId + 1 , title: newPostTitle, body: newPostBody}
-        setUserPosts([...userPosts,newPost]);
         setAddPost(false)
-        AddNewPostUser(user.id,newPost);
-        //add new post to DB
+        AddNewPostUsers(user.id,newPost);
+        setNewPostTitle("");
+        setNewPostBody("")
+      
     }
 
 
@@ -27,14 +27,16 @@ const UserPosts = ({ user, AddNewPostUser }) => {
 
     return (
         <div className="UserPosts">
-            <strong>Posts - User {user.id}</strong> <button onClick={() => setAddPost(true)}>Add</button> <br/> <br/> <br/>
+            <strong>Posts - User {user.id}</strong> <button onClick={() => setAddPost(true)}>Add</button> <br/>
 
-            {!addPost && userPosts.map((post) => {
+            {!addPost && user.posts.map((post) => {
 
                 return <Post key={post.id} post={post}></Post> 
 
             })
             }
+
+          
 
             {addPost &&
 

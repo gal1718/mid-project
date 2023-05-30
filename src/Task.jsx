@@ -1,14 +1,10 @@
-
-
 import { useState } from 'react'
 
 const Task = ({task,userTasksMarkCompleted}) => {
 
-    const [taskCompleted, setTaskCompleted] = useState(task.completed); 
-
 
     const taskMarkCompleted = (userId,taskId) =>{
-        setTaskCompleted(true);
+        
         userTasksMarkCompleted(userId,taskId)
 
     }
@@ -19,8 +15,9 @@ const Task = ({task,userTasksMarkCompleted}) => {
 
 
             <strong> Title: </strong> {task.title}<br/> <br/>
-            <strong> Completed: </strong> {taskCompleted?.toString()}<br /><br/>
-            {!taskCompleted && <button onClick={() => taskMarkCompleted(task.userId, task.id)}>Mark Completed</button>}
+            <strong> Completed: </strong> {task.completed?.toString()}<br /><br/>
+            {!task.completed && <button onClick={() => taskMarkCompleted(task.userId, task.id)}>Mark Completed</button>}
+         
 
         </div>
 

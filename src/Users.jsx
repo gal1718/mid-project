@@ -9,9 +9,10 @@ const Users = () => {
 
     const [users, setUsers] = useState([]);// "DB" users
     const [addNewUser, setAddNewUser] = useState(false);
+    const [email,setEmail] = useState("");
+    const [name,setName] = useState("");
     //const [newUser, setNewUser] = useState({id: 0, name: "", email: "" });
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
+    //const [displayUser, setDisplayUser] = useState({});
     const [filter, setNewFilter] = useState("")
 
 
@@ -90,6 +91,25 @@ const Users = () => {
     }
 
 
+    const markUserTasksAllCompleted = (userId) => {
+
+        let usersCopy = users;
+        const userIndex = users.findIndex(user => user.id == userId)
+        let updatedUser = usersCopy[userIndex]
+        updatedUser.tasksCompleted = true;
+        let updatedUserTasks = updatedUser.tasks.map(task => {return {...task,completed: true}});
+        updatedUser.tasks = updatedUserTasks;
+       // console.log(JSON.stringify(updatedUser))
+        usersCopy.splice(userIndex,1)
+        usersCopy.push(updateUser);
+       //console.log(usersCopy);
+        setUsers(usersCopy);
+        //console.log(JSON.stringify(users))
+    
+
+    }
+
+
     const AddNewTaskUsers = (userId, task) => {
 
         let usersCopy = users;
@@ -137,7 +157,7 @@ const Users = () => {
 
             {users.filter((user) => user.name.toLowerCase().indexOf(filter) != -1 || user.email.toLowerCase().indexOf(filter) != -1).map((user) =>
 
-                <User key={user.id} user={user} updateUser={updateUser} deleteUser={deleteUser} markTaskCompleted={markTaskCompleted} AddNewTaskUsers={AddNewTaskUsers} AddNewPostUsers={AddNewPostUsers}></User>)
+                <User key={user.id} user={user} updateUser={updateUser} deleteUser={deleteUser} markTaskCompleted={markTaskCompleted} markUserTasksAllCompleted={markUserTasksAllCompleted} AddNewTaskUsers={AddNewTaskUsers} AddNewPostUsers={AddNewPostUsers}></User>)
             }
 
 
