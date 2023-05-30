@@ -91,7 +91,7 @@ const Users = () => {
     }
 
 
-    const markUserTasksAllCompleted = (userId) => {
+    const markAllUserTasksAsCompleted = (userId) => {
 
         let usersCopy = users;
         const userIndex = users.findIndex(user => user.id == userId)
