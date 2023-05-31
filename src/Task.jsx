@@ -6,7 +6,7 @@ const Task = ({task,userTasksMarkCompleted}) => {
 
 
     return (
-        <div style={{border: "2px solid black", marginBottom: "10px"}} className="Task">
+        <div style={{border: "2px solid black", marginBottom: "10px", padding: "inherit"}} className="Task">
             <strong> Title: </strong> {task.title}<br/> <br/>
             <strong> Completed: </strong> {task.completed?.toString()}<br /><br/>
             {!task.completed && <button onClick={() => taskMarkCompleted(task.userId, task.id)}>Mark Completed</button>}

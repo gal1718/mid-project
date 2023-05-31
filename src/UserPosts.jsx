@@ -3,35 +3,38 @@ import * as React from 'react'
 import { useState } from 'react'
 import Post from './Post'
 
-const UserPosts = ({ user, AddNewPost}) => {
+const UserPosts = ({ user, AddNewPost }) => {
 
     const [addPost, setAddPost] = useState(false);
-    const [newPostTitle,setNewPostTitle] = useState("");
-    const [newPostBody,setNewPostBody] = useState("");
+    const [newPostTitle, setNewPostTitle] = useState("");
+    const [newPostBody, setNewPostBody] = useState("");
 
 
     const handleNewPost = () => {
         const biggestId = Math.max(...user.posts.map((post) => post.id), 0);
-        const newPost = { userId: user.id, id: biggestId + 1 , title: newPostTitle, body: newPostBody}
+        const newPost = { userId: user.id, id: biggestId + 1, title: newPostTitle, body: newPostBody }
         setAddPost(false)
-        AddNewPost(user.id,newPost);
+        AddNewPost(user.id, newPost);
         setNewPostTitle("");
         setNewPostBody("")
-      
+
     }
 
 
     return (
-        <div className="UserPosts">
-            <strong>Posts - User {user.id}</strong> <button onClick={() => setAddPost(true)}>Add</button> <br/>
-
+        <div className="UserPosts" style={{ padding: "7px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <strong>Posts - User {user.id}</strong>
+                <button onClick={() => setAddPost(true)}>Add</button> <br />
+            </div>
+            <br/><br/>
             {!addPost && user.posts.map((post) => {
 
-                return <Post key={post.id} post={post}></Post> 
+                return <Post key={post.id} post={post}></Post>
 
             })
             }
-  
+
             {addPost &&
 
                 <div>

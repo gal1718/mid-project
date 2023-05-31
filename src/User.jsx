@@ -4,7 +4,7 @@ import UserTasks from "./UserTasks";
 import UserPosts from "./UserPosts";
 
 
-const User = ({ user, updateUser, deleteUser, markTaskCompleted, AddNewTask, AddNewPost, markUserTasksAllCompleted }) => {
+const User = ({ user, updateUser, deleteUser, markTaskCompleted, AddNewTask, AddNewPost, markUserTasksAllCompleted, addNewUser}) => {
 
     const [displayUser, setDisplayUser] = useState({ id: user.id, name: user.name, email: user.email, address: user.address });
     const [selected, setSelected] = useState(false);
@@ -59,15 +59,17 @@ const User = ({ user, updateUser, deleteUser, markTaskCompleted, AddNewTask, Add
                 </div>
             </form>
 
-            <div style={{ width: "350px", position: "absolute", top: "0", "right": "50%", overflowY: "auto", height: "340px" }}>
-                {selected &&
-                    <div>
+         
+                {selected && !addNewUser && 
+                    <div style={{ width: "350px", position: "absolute", top: "0", "left": "110%", overflowY: "auto", height: "340px" }}>
                         <UserTasks markCompleted={markCompleted} markAllCompleted={markAllCompleted} user={user} AddNewTask={AddNewTask}></UserTasks><br /> <br />
                         <UserPosts user={user} AddNewPost={AddNewPost}></UserPosts>
                     </div>
                 }
-            </div>
+          
+
         </div>
+
     )
 }
 

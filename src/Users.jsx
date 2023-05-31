@@ -23,7 +23,6 @@ const Users = () => {
             const { data: allposts } = await axios.get(constants.postsUrl);
 
             const newusers = users.map((user) => {
-
                 const tasks = allTasks.filter((task) => task.userId == user.id);
                 const posts = allposts.filter((post) => post.userId == user.id);
                 const tasksCompleted = AllTasksCompleted(tasks);
@@ -95,7 +94,7 @@ const Users = () => {
             if (user.id != userId)
                 return user
             else {
-                return { ...user, tasks: [...user.tasks, task], tasksCompleted: false};
+                return { ...user, tasks: [...user.tasks, task], tasksCompleted: false };
             }
         })
         setUsers(newUsers);
@@ -129,13 +128,23 @@ const Users = () => {
                 <button onClick={() => setAddNewUser(true)}>Add</button>
             </div>
 
-            {users.filter((user) => user.name.toLowerCase().indexOf(filter) != -1 || user.email.toLowerCase().indexOf(filter) != -1).map((user) =>
-                <User key={user.id} user={user} updateUser={updateUser} deleteUser={deleteUser} markTaskCompleted={markTaskCompleted} markUserTasksAllCompleted={markUserTasksAllCompleted} AddNewTask={AddNewTask} AddNewPost={AddNewPost}></User>)
-            }
+            <div style={{ display: "flex" }}>
 
-            {addNewUser &&
-                <NewUser handleNewUser={handleNewUser} setAddNewUser={setAddNewUser}></NewUser>
-            }
+                <div>
+                    {users.filter((user) => user.name.toLowerCase().indexOf(filter) != -1 || user.email.toLowerCase().indexOf(filter) != -1).map((user) =>
+                        <User key={user.id} user={user} updateUser={updateUser} addNewUser={addNewUser} deleteUser={deleteUser} markTaskCompleted={markTaskCompleted} markUserTasksAllCompleted={markUserTasksAllCompleted} AddNewTask={AddNewTask} AddNewPost={AddNewPost}></User>)
+                    }
+                </div>
+
+                <div>
+                    {addNewUser &&
+                    <> <strong>ADD New user</strong>
+                        <NewUser handleNewUser={handleNewUser} setAddNewUser={setAddNewUser}></NewUser>
+                        </>
+                    }
+                </div>
+
+            </div>
 
         </div>
     )

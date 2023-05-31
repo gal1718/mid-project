@@ -24,18 +24,19 @@ const UserTasks = ({ user, markCompleted, markAllCompleted, AddNewTask }) => {
 
 
     return (
-        <div className="UserTasks">
-            <strong>Todos - User {user.id}</strong> <button onClick={() => setAddTask(true)}>Add</button> <br /> <br /> <br />
+        <div className="UserTasks" style={{padding: "7px"}}>
+            <div style = {{display: "flex", justifyContent: "space-between"}}>
+            <strong>Todos - User {user.id}</strong> <button onClick={() => setAddTask(true)}>Add</button>
             {!user.tasksCompleted && <button onClick={() => markAllCompleted()}>Mark All Completed</button>}
-
-
+            </div>
+            <br/><br/>
             {!addTask && user.tasks.map((task) => {
                 return <Task userTasksMarkCompleted={userTasksMarkCompleted} markAllCompleted={markAllCompleted} key={task.id} task={task}></Task>
             })
             }
-
+          
             {addTask &&
-                <div>
+                <div style = {{display: "flex", justifyContent: "space-between"}}>
                     <strong>Title: <input value={newTaskTitle} onChange={(event) => setNewTaskTitle(event.target.value)} type="text"></input></strong>
                     <button onClick={() => setAddTask(false)}>Cancel</button>
                     <button onClick={() => handleNewTaskTitle()}>Add</button>

@@ -1,13 +1,12 @@
 export const AllTasksCompleted = (userTasks) => {
+ 
+    if (userTasks.some((task) => task.completed === false))
+        return false;
+    return true
 
 
-    // return userTasks.some((task) => task.completed === false)
-    for (let i = 0; i < userTasks.length; i++) {
-        if (!userTasks[i].completed) {
-            return false;
-        }
-    }
-    return true;
 }
+
+
 
 
