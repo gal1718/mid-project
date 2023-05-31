@@ -61,7 +61,7 @@ const User = ({ user, updateUser, deleteUser, markTaskCompleted, AddNewTask, Add
 
          
                 {selected && !addNewUser && 
-                    <div style={{ width: "350px", position: "absolute", top: "0", "left": "110%", overflowY: "auto", height: "340px" }}>
+                    <div style={{ width: "350px", position: "absolute", top: "0", "left": "110%", overflowY: "auto", height: "100%" }}>
                         <UserTasks markCompleted={markCompleted} markAllCompleted={markAllCompleted} user={user} AddNewTask={AddNewTask}></UserTasks><br /> <br />
                         <UserPosts user={user} AddNewPost={AddNewPost}></UserPosts>
                     </div>
