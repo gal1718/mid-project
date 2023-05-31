@@ -3,44 +3,35 @@ import { useEffect, useState } from "react"
 import User from './User';
 import './Users.css';
 import NewUser from "./NewUser";
+//import  {usersUrl,toDosUrl,postsUrl} from './constants'
+import * as constants from './constants ';
+import { AllTasksCompleted } from './utils'
 
 
 const Users = () => {
 
     const [users, setUsers] = useState([]);// "DB" users
     const [addNewUser, setAddNewUser] = useState(false);
-    const [email,setEmail] = useState("");
-    const [name,setName] = useState("");
-    //const [newUser, setNewUser] = useState({id: 0, name: "", email: "" });
-    //const [displayUser, setDisplayUser] = useState({});
     const [filter, setNewFilter] = useState("")
 
 
-    const usersUrl = 'https://jsonplaceholder.typicode.com/users'
-    const toDosUrl = 'https://jsonplaceholder.typicode.com/todos';
-    const postsUrl = 'https://jsonplaceholder.typicode.com/posts';
-
-
-
-
     useEffect(() => {
-
         const getData = async () => {
-            let { data: users } = await axios.get(usersUrl);
-            const { data: allTasks } = await axios.get(toDosUrl);
-            const { data: allposts } = await axios.get(postsUrl);
-            users = users.map((user) => {
 
-                const userTasks = allTasks.filter((task) => task.userId == user.id);
-                const userPosts = allposts.filter((post) => post.userId == user.id);
-                user.tasks = userTasks;
-                user.posts = userPosts;
-                user.tasksCompleted = AllTasksCompleted(userTasks);
+            const { data: users } = await axios.get(constants.usersUrl);
+            const { data: allTasks } = await axios.get(constants.toDosUrl);
+            const { data: allposts } = await axios.get(constants.postsUrl);
 
-                return user;
+            const newusers = users.map((user) => {
+
+                const tasks = allTasks.filter((task) => task.userId == user.id);
+                const posts = allposts.filter((post) => post.userId == user.id);
+                const tasksCompleted = AllTasksCompleted(tasks);
+
+                return { ...user, tasks, posts, tasksCompleted };
             })
-            
-            setUsers(users);
+
+            setUsers(newusers);
         }
         getData();
 
@@ -48,129 +39,107 @@ const Users = () => {
 
 
 
-    const AllTasksCompleted = (userTasks) => {
-
-        for (let i = 0; i < userTasks.length; i++) {
-            if (!userTasks[i].completed) {
-                return false;
-            }
-        }
-        return true;
+    const updateUser = (userToUpdate) => {
+        const newUsers = users.map((user) => user.id != userToUpdate.id ? user : userToUpdate);
+        setUsers(newUsers);
     }
 
 
-    const updateUser = (obj) => {
-
-        let usersCopy = users;
-        let userIndex = users.findIndex(user => user.id == obj.id)
-        usersCopy[userIndex] = obj;
-        setUsers([...usersCopy]);
-
+    const deleteUser = (userId) => {
+        const newUsers = users.filter(user => user.id != userId);
+        setUsers(newUsers);
     }
 
-
-    const deleteUser = (obj) => {
-
-        let newUsers = users.filter(user => user.id != obj.id);
-        setUsers([...newUsers]);
-
-    }
 
     const markTaskCompleted = (userId, taskId) => {
+        const newUsers = users.map((user) => {
+            if (user.id != userId)
+                return user;
+            else {
+                user.tasks.map((task) => {
+                    if (task.id != taskId)
+                        return task
+                    else {
+                        task.completed = true;
+                        return task;
+                    }
 
-        let usersCopy = users;
-        const userIndex = users.findIndex(user => user.id == userId)
-        const taskIndex = usersCopy[userIndex].tasks.findIndex(task => task.id == taskId);
-        usersCopy[userIndex].tasks[taskIndex].completed = true;
-
-        usersCopy[userIndex].tasksCompleted = AllTasksCompleted(usersCopy[userIndex].tasks)
-        setUsers([...usersCopy]);
-
-        return usersCopy[userIndex].tasksCompleted;
-
+                })
+                user.tasksCompleted = AllTasksCompleted(user.tasks)
+                return user;
+            }
+        })
+        setUsers(newUsers);
     }
 
 
-    const markAllUserTasksAsCompleted = (userId) => {
-
-        let usersCopy = users;
-        const userIndex = users.findIndex(user => user.id == userId)
-        let updatedUser = usersCopy[userIndex]
-        updatedUser.tasksCompleted = true;
-        let updatedUserTasks = updatedUser.tasks.map(task => {return {...task,completed: true}});
-        updatedUser.tasks = updatedUserTasks;
-       // console.log(JSON.stringify(updatedUser))
-        usersCopy.splice(userIndex,1)
-        usersCopy.push(updateUser);
-       //console.log(usersCopy);
-        setUsers(usersCopy);
-        //console.log(JSON.stringify(users))
-    
-
+    const markUserTasksAllCompleted = (userId) => {
+        const newUsers = users.map(user => {
+            if (user.id != userId)
+                return user
+            else {
+                user.tasks.map(task => {
+                    task.completed = true;
+                    return task;
+                })
+                user.tasksCompleted = true;
+                return user
+            }
+        })
+        setUsers(newUsers);
     }
 
 
-    const AddNewTaskUsers = (userId, task) => {
-
-        let usersCopy = users;
-        let userIndex = users.findIndex(user => user.id == userId)
-        usersCopy[userIndex].tasks.push(task)
-        usersCopy[userIndex].tasksCompleted = false;
-        setUsers([...usersCopy]);
-
+    const AddNewTask = (userId, task) => {
+        const newUsers = users.map(user => {
+            if (user.id != userId)
+                return user
+            else {
+                return { ...user, tasks: [...user.tasks, task], tasksCompleted: false};
+            }
+        })
+        setUsers(newUsers);
     }
 
 
-    const AddNewPostUsers = (userId, post) => {
-
-        let usersCopy = users;
-        let userIndex = users.findIndex(user => user.id == userId)
-        usersCopy[userIndex].posts.push(post)
-        setUsers([...usersCopy]);
-
+    const AddNewPost = (userId, post) => {
+        const newUsers = users.map(user => {
+            if (user.id != userId)
+                return user
+            else {
+                return { ...user, posts: [...user.posts, post] };
+            }
+        })
+        setUsers(newUsers);
     }
 
-    const handleNewUser = () => {
 
+    const handleNewUser = (email, name) => {
         const biggestId = Math.max(...users.map((user) => user.id), 0);
         const newUser = { id: biggestId + 1, name, email, address: { street: "", city: "", zipcode: "" }, tasks: [], posts: [], tasksCompleted: false }
-        let usersCopy = users;
-        usersCopy.push(newUser);
-
-        setUsers([...usersCopy]);
-        setName("");
-        setEmail("");
+        setUsers([...users, newUser]);
     }
 
 
 
     return (
-
         <div className="Users">
-
             <div style={{ display: "flex" }}>
                 Search: <input type="text" onChange={(event) => setNewFilter(event.target.value)}></input>
                 <button onClick={() => setAddNewUser(true)}>Add</button>
-
             </div>
 
-
             {users.filter((user) => user.name.toLowerCase().indexOf(filter) != -1 || user.email.toLowerCase().indexOf(filter) != -1).map((user) =>
-
-                <User key={user.id} user={user} updateUser={updateUser} deleteUser={deleteUser} markTaskCompleted={markTaskCompleted} markUserTasksAllCompleted={markUserTasksAllCompleted} AddNewTaskUsers={AddNewTaskUsers} AddNewPostUsers={AddNewPostUsers}></User>)
+                <User key={user.id} user={user} updateUser={updateUser} deleteUser={deleteUser} markTaskCompleted={markTaskCompleted} markUserTasksAllCompleted={markUserTasksAllCompleted} AddNewTask={AddNewTask} AddNewPost={AddNewPost}></User>)
             }
 
-
             {addNewUser &&
-
-                <NewUser handleNewUser={handleNewUser} setAddNewUser={setAddNewUser} setEmail={setEmail} setName={setName} name={name} email={email}></NewUser>
-
+                <NewUser handleNewUser={handleNewUser} setAddNewUser={setAddNewUser}></NewUser>
             }
 
         </div>
     )
 }
-
 
 
 export default Users

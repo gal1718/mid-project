@@ -4,54 +4,32 @@ import UserTasks from "./UserTasks";
 import UserPosts from "./UserPosts";
 
 
-const User = ({ user, updateUser, deleteUser, markTaskCompleted, AddNewTaskUsers, AddNewPostUsers, markUserTasksAllCompleted }) => {
+const User = ({ user, updateUser, deleteUser, markTaskCompleted, AddNewTask, AddNewPost, markUserTasksAllCompleted }) => {
 
-    const [displayUser, setDisplayUser] = useState(user);
+    const [displayUser, setDisplayUser] = useState({ id: user.id, name: user.name, email: user.email, address: user.address });
     const [selected, setSelected] = useState(false);
     const [showOtherData, setShowOtherData] = useState(false);
 
 
     const handleSubmit = (event) => {
-        debugger
         event.preventDefault();
-        //console.log(`displayUser: ${JSON.stringify(displayUser)} user: ${JSON.stringify(user)}`)
-        updateUser({ ...user, name: displayUser.name, email: displayUser.email, address: displayUser.address});
-
+        updateUser({ ...user, ...displayUser });
     }
+
 
     const markCompleted = (userId, taskId) => {
-
-        const tasks = displayUser.tasks.map(task => task.id === taskId ? { ...task, completed: true } : task);
-        setDisplayUser({ ...displayUser, tasks });
-        markTaskCompleted(userId, taskId)
-
-
+        markTaskCompleted(userId, taskId);
     }
+
 
     const markAllCompleted = () => {
-
-        const tasks = displayUser.tasks.map(task =>   {return {...task, completed: true}});
-        setDisplayUser({ ...displayUser, tasks });
         markUserTasksAllCompleted(user.id)
-
-
     }
-
-    const AddNewTaskUser = (userId, task) => {
-
-        AddNewTaskUsers(userId, task)
-
-    }
-
-
 
 
 
     return (
         <div className="User" style={{ textAlign: 'left', margin: "10px", position: "relative" }}>
-
-
-
             <form style={{ backgroundColor: selected ? 'orange' : '', border: user.tasksCompleted ? '2px solid green' : '2px solid red', width: "340px", padding: "15px" }} onSubmit={handleSubmit}>
 
                 <div style={{ display: "flex", flexDirection: "column" }}>
@@ -72,33 +50,24 @@ const User = ({ user, updateUser, deleteUser, markTaskCompleted, AddNewTaskUsers
                             </div>
 
                         }
-
-
                     </div>
+
                     <div style={{ alignSelf: "end" }}>
                         <button style={{ marginRight: "6px" }} type="submit">Update</button>
-                        <button onClick={() => deleteUser(displayUser)}>Delete</button>
+                        <button onClick={() => deleteUser(user.id)}>Delete</button>
                     </div>
-
                 </div>
-
             </form>
 
             <div style={{ width: "350px", position: "absolute", top: "0", "right": "50%", overflowY: "auto", height: "340px" }}>
-
                 {selected &&
-
                     <div>
-                        <UserTasks markCompleted={markCompleted} markAllCompleted={markAllCompleted} user={user} AddNewTaskUser={AddNewTaskUser}></UserTasks><br /> <br />
-                        <UserPosts user={user} AddNewPostUsers={AddNewPostUsers}></UserPosts>
+                        <UserTasks markCompleted={markCompleted} markAllCompleted={markAllCompleted} user={user} AddNewTask={AddNewTask}></UserTasks><br /> <br />
+                        <UserPosts user={user} AddNewPost={AddNewPost}></UserPosts>
                     </div>
-
                 }
             </div>
-
-
         </div>
-
     )
 }
 

@@ -3,26 +3,22 @@ import * as React from 'react'
 import { useState } from 'react'
 import Post from './Post'
 
-const UserPosts = ({ user, AddNewPostUsers }) => {
+const UserPosts = ({ user, AddNewPost}) => {
 
     const [addPost, setAddPost] = useState(false);
     const [newPostTitle,setNewPostTitle] = useState("");
     const [newPostBody,setNewPostBody] = useState("");
 
-   
 
     const handleNewPost = () => {
-    
         const biggestId = Math.max(...user.posts.map((post) => post.id), 0);
         const newPost = { userId: user.id, id: biggestId + 1 , title: newPostTitle, body: newPostBody}
         setAddPost(false)
-        AddNewPostUsers(user.id,newPost);
+        AddNewPost(user.id,newPost);
         setNewPostTitle("");
         setNewPostBody("")
       
     }
-
-
 
 
     return (
@@ -35,9 +31,7 @@ const UserPosts = ({ user, AddNewPostUsers }) => {
 
             })
             }
-
-          
-
+  
             {addPost &&
 
                 <div>
@@ -48,8 +42,6 @@ const UserPosts = ({ user, AddNewPostUsers }) => {
                 </div>
 
             }
-
-
 
         </div>
 
